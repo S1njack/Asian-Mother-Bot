@@ -1,28 +1,32 @@
 import random
 import os
+import sys
 import discord
 from keep_alive import keep_alive
 from discord.ext import commands
+from sys import exit
 from dotenv import load_dotenv
 load_dotenv()
 
 bot = commands.Bot(command_prefix='`')
 client = discord.Client()
 
+TOKEN = os.getenv('DISCORD_TOKEN')
+
 
 @bot.event
 async def on_ready():
     print(f'{bot.user} has connected to Discord!')
 
+@bot.event (name='shutdown')
+async def close(ctx):
+  await message.channel.send("Shutting down")
+  await bot.close()
+  sys.exit(0)
+
 @bot.event
 async def on_message(message):
-    ''''
-    sendMsg = True
-    if sendMsg == True:
-        channel = client.get_channel(787215182572027957)
-        await channel.channel.send("I home now, you doing da study lah???!!??!?")
-        sendMsg = False
-    '''
+
     if message.content.startswith('are you proud of me'):
         await message.channel.send("no")
     if message.content.startswith('mum') and not " " in message.content:
@@ -70,8 +74,12 @@ async def on_message(message):
 
     if "australian" in message.content or "austraila" in message.content or "aussie" in message.content or "morning" in message.content:
         await message.channel.send("G'day Cunt")
-  
+    if message.author == client.user:
+        return
+    if message.author.bot: return
+
+    if "girlfriend" in message.content:
+      await message.channel.send("Why you got girlfriend HMMM, you so stupid lah, girlfriend make you get bad grades")
 
 keep_alive();
-TOKEN = os.getenv('DISCORD_TOKEN')
 bot.run(TOKEN)
